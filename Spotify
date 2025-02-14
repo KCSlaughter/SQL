@@ -1,0 +1,39 @@
+# In this project I have queried from a large Spotify database to answer various questions about today's most popular music
+
+#1. How many tracks did each performer record that reached a popularity score more than 89?
+SELECT COUNT(track_name)
+, artist_name
+, popularity
+FROM Spotifydata
+WHERE popularity>89
+GROUP BY artist_name;
+
+#2. What are the names of those tracks?
+SELECT track_name
+, artist_name
+, popularity
+FROM Spotifydata
+WHERE popularity>89
+ORDER BY artist_name
+
+#3. What are the top 20 most popular songs and their artists?
+SELECT track_name
+, artist_name
+, popularity
+FROM Spotifydata
+ORDER BY popularity desc
+LIMIT 20
+
+#4. Divide the songs into cases describing three rankings of popularity
+SELECT artist_name, track_name, popularity,
+CASE WHEN popularity>90 THEN '1_popular' 
+    WHEN popularity>80 THEN '2_liked'
+    ELSE '3_unpopular'
+END 'popularity_ranking'
+FROM Spotifydata
+ORDER BY popularity_ranking asc; 
+
+#5. What is the song with the slowest tempo?
+SELECT MIN(tempo), artist_name, track_name
+FROM Spotifydata
+;
