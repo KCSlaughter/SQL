@@ -1,4 +1,6 @@
-# In this project I have queried from a large Spotify database to answer various questions about today's most popular music
+# In this project I downloaded Spotify data from Kaggle.
+# Then I created a table to insert Spotify data into.
+# Finally I used SQL to answer various questions about today's most popular music
 
 #1. How many tracks did each performer record that reached a popularity score more than 89?
 SELECT COUNT(track_name)
