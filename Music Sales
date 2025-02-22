@@ -1,0 +1,110 @@
+##In this project I downloaded a database storing 11 tables with information about music sales, employees, invoices, and more. 
+I then used SQL to find out more information about the customer base, the sales, and the employees.
+
+#1. Show all the customers (ID, Names, and Country) who do not live in the USA
+SELECT CustomerID
+, FirstName
+, LastName
+, Country
+FROM chinook.customers
+WHERE country != 'United States'
+ORDER BY CustomerID;
+
+#2. Show only customers from Germany (make sure you capture any entries where the country name  is misspelled).
+SELECT * 
+FROM chinook.customers
+WHERE country LIKE 'German%';
+
+#3. Which invoices are related to these German customers? 
+SELECT cust.CustomerID
+, cust.FirstName
+, cust.LastName
+, cust.Country
+, invoices.InvoiceID
+FROM chinook.customers cust
+LEFT JOIN chinook.invoices invoices
+ON cust.CustomerID = invoices.CustomerID
+WHERE Country LIKE 'German%'
+;
+
+#4. How many invoices does each German customer have? 
+SELECT cust.CustomerID
+, cust.FirstName
+, cust.LastName
+, cust.Country
+, COUNT(invoices.InvoiceID) AS no_of_invoices
+FROM chinook.customers cust
+LEFT JOIN chinook.invoices invoices
+ON cust.CustomerID = invoices.CustomerID
+WHERE Country LIKE 'German%'
+GROUP BY cust.FirstName
+;
+
+#5. Of these German customers, how much has each spent on average? Round the total to the nearest whole number.  
+SELECT cust.CustomerID
+, cust.FirstName
+, cust.LastName
+, cust.Country
+, COUNT(invoices.InvoiceID) AS no_of_invoices
+, ROUND(AVG(invoices.total)) AS avg_spent
+FROM chinook.customers cust
+LEFT JOIN chinook.invoices invoices
+ON cust.CustomerID = invoices.CustomerID
+WHERE Country LIKE 'German%'
+GROUP BY cust.FirstName
+;
+
+#6. Of all the customers in any country, who has spent the most?
+SELECT cust.CustomerID
+, cust.FirstName
+, cust.LastName
+, cust.Country
+, COUNT(invoices.InvoiceID) AS no_of_invoices
+, MAX(invoices.total)
+FROM chinook.customers cust
+LEFT JOIN chinook.invoices invoices
+ON cust.CustomerID = invoices.CustomerID
+GROUP BY cust.FirstName
+ORDER BY invoices.total desc
+LIMIT 1
+;
+
+#7. Show a list of all customers' distinct countries. Order them alphabetically.
+SELECT DISTINCT country
+FROM chinook.customers
+ORDER BY country asc
+;
+
+#8. Show the price of each TrackID.
+SELECT TrackID
+, UnitPrice
+FROM chinook.invoice_items
+;
+
+#9. What are the names of the tracks and their prices? 
+SELECT tracks.Name
+, items.UnitPrice
+FROM chinook.invoice_items items
+INNER JOIN chinook.tracks tracks 
+ON items.trackid = tracks.trackid
+ORDER BY tracks.name asc
+;
+
+#10. Show the name of the employee and their title and the total they have sold.
+SELECT emps.FirstName
+, emps.title
+, SUM(invoices.Total) AS total_value_sold
+FROM chinook.employees emps
+INNER JOIN chinook.customers cust
+ON emps.employeeid = cust.supportrepid
+INNER JOIN chinook.invoices invoices
+ON cust.customerid = invoices.customerid
+GROUP by emps.firstname
+;
+
+#11. Show which person each employee role reports to
+SELECT title
+, reportsto
+FROM chinook.employees
+GROUP BY title
+;
