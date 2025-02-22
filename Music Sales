@@ -1,4 +1,4 @@
-##In this project I downloaded a database storing 11 tables with information about music sales, employees, invoices, and more. 
+#In this project I downloaded a database storing 11 tables with information about music sales, employees, invoices, and more. 
 I then used SQL to find out more information about the customer base, the sales, and the employees.
 
 #1. Show all the customers (ID, Names, and Country) who do not live in the USA
